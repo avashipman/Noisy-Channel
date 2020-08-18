@@ -284,6 +284,16 @@ jsPsych.plugins["survey-distractor"] = (function () {
         }
       };
       targetArray();
+      // start the response listener
+    if (trial.choices != jsPsych.NO_KEYS) {
+      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: after_response,
+        valid_responses: trial.choices,
+        persist: false,
+        allow_held_key: false,
+      });
+      keyboardListener;
+    }
     };
     const intervalId = setInterval(slideShow, trial.response_next_image);
 
@@ -366,7 +376,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       });
 
     // start the response listener
-    if (trial.choices != jsPsych.NO_KEYS) {
+   /* if (trial.choices != jsPsych.NO_KEYS) {
       var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
@@ -374,7 +384,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
         allow_held_key: false,
       });
       keyboardListener;
-    }
+    }*/
 
     // hide stimulus if stimulus_duration is set
     if (trial.stimulus_duration !== null) {
