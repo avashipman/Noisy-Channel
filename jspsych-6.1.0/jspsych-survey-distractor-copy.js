@@ -282,6 +282,8 @@ jsPsych.plugins["survey-distractor"] = (function () {
         response = info;
       }
     };
+    
+    let currentKeypressListener = null;
 
     function slideShow() {
       console.log(imgArray[curIndex]);
@@ -311,6 +313,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       //after response replacement
       const listener = function(e) {
         if (trial.choices.includes(e.code)) {
+          console.log(e.code, trial.choices, distractor_data)
           distractor_data.push(e.code)
           document.removeEventListener('keypress', listener)
           currentKeypressListener = null
