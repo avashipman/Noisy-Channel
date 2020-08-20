@@ -311,7 +311,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
       //after response replacement
       const listener = function(e) {
         if (trial.choices.includes(e.code)) {
-          after_response
+          distractor_data.push(e.code)
           document.removeEventListener('keypress', listener)
           currentKeypressListener = null
         }
