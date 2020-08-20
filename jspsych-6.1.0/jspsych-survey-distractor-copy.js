@@ -293,6 +293,8 @@ jsPsych.plugins["survey-distractor"] = (function () {
         document.getElementById("distractor-stimulus").className = "";
         document.getElementById("distractor-stimulus").src = imgArray[curIndex];
       }, 800);
+      
+      //function to count the amount of time X appears
       function targetArray() {
         var x = imgArray[curIndex]
         if (x == "target.png") {
@@ -300,16 +302,22 @@ jsPsych.plugins["survey-distractor"] = (function () {
         }
       };
       targetArray();
-      // start the response listener
-    if (trial.choices != jsPsych.NO_KEYS) {
-      var keyboardListener = jsPsych.pluginAPI.getKeyboardResponse({
-        callback_function: after_response,
-        valid_responses: trial.choices,
-        persist: false,
-        allow_held_key: false,
-      });
-      keyboardListener;
-    }
+      
+      //keyboard listener
+      if (currentKeypressListener) {
+        document.removeEventListener('keypress', currentKeypressListener)
+        currentKeypressListener = null
+      }
+      //after response replacement
+      const listener = function(e) {
+        if (trial.choices.includes(e.code)) {
+          after_response
+          document.removeEventListener('keypress', listener)
+          currentKeypressListener = null
+        }
+      }
+      currentKeypressListener = listener
+      document.addEventListener('keypress', listener)
     };
     const intervalId = setInterval(slideShow, trial.response_next_image);
 
