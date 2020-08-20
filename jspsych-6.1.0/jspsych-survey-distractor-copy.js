@@ -266,6 +266,22 @@ jsPsych.plugins["survey-distractor"] = (function () {
     var imgArray = trial.stimulus;
     var curIndex = 0;
     var targetData = [];
+    
+    var distractor_data = []
+    var after_response = function (info) {
+      display_element_distractor.querySelector(
+        "#distractor-stimulus"
+      ).className += " responded";
+
+      if (imgArray[curIndex] == "target.png"){
+         distractor_data.push(response.key)
+      }
+
+      // only record the first response
+      if (response.key == null) {
+        response = info;
+      }
+    };
 
     function slideShow() {
       console.log(imgArray[curIndex]);
@@ -318,22 +334,6 @@ jsPsych.plugins["survey-distractor"] = (function () {
       }
     };
     */
-
-    var distractor_data = []
-    var after_response = function (info) {
-      display_element_distractor.querySelector(
-        "#distractor-stimulus"
-      ).className += " responded";
-
-      if (imgArray[curIndex] == "target.png"){
-         distractor_data.push(response.key)
-      }
-
-      // only record the first response
-      if (response.key == null) {
-        response = info;
-      }
-    };
 
 // function when you hit submit
     display_element_main_task
