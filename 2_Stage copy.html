@@ -9,6 +9,7 @@
   <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
   <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="jspsych-6.1.0/jspsych-survey-distractor-copy.js"></script>
+  <meta charset="utf-8">
   <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css">
   <link href="jspsych-6.1.0/css/fadeOut.css" rel="stylesheet" type="text/css">
   <style>
@@ -88,7 +89,7 @@
             button_label: "SUBMIT",
             preamble: "Please write one sentence.",
             stimulus: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]),
-            choices: [56],
+            choices: ['Digit8'],
             response_next_image: 1800,
             post_trial_gap: 500,
           },
@@ -128,7 +129,7 @@
             return [{ prompt: jsPsych.timelineVariable("prompt", true) }];
           },
           stimulus: jsPsych.timelineVariable("distractor"),
-          choices: [56],
+          choices: ['Digit8'],
           preamble: "Please write one sentence.",
           response_next_image: 1800,
           post_trial_gap: 500,
@@ -161,7 +162,7 @@
 
           var targetAmount = lastData.select('target').sum();
           var correctAmount = lastData.select('correctKeyPressed').values.toString();
-          var correct_amount = (correctAmount.match(/56/g) || []).length
+          var correct_amount = (correctAmount.match(/Digit8/g) || []).length
           console.log(correct_amount);
 
         return "<p> In this last section you typed "+wordCount+" words and detected "+correct_amount+" out of "+targetAmount+" X's.</p>" +
@@ -201,7 +202,7 @@
 
         var targetAmount = totalData.select('target').sum();
         var correctAmount = totalData.select('correctKeyPressed').values.toString();
-        var correct_amount = (correctAmount.match(/56/g) || []).length
+        var correct_amount = (correctAmount.match(/Digit8/g) || []).length
 
         var words = totalData.select('responses').values.toString();
         var wordsTotal = words.split(" ").length;
