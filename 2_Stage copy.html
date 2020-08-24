@@ -319,7 +319,7 @@
 
     jsPsych.init({
       timeline: timeline,
-      on_finish: function () { "<p> You have finished the experiment!</p> Please go back to the MechanicalTurk page." },
+      on_finish: function () { document.write("<p> You have finished the experiment!</p> Please go back to the MechanicalTurk page to enter your code.")  },
     })
   </script>
 </body>
