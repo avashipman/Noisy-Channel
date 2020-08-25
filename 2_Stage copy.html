@@ -246,7 +246,7 @@
     var rest = {
       type: "html-button-response",
       stimulus: function () {
-          var lastData = jsPsych.data.get().last(4);
+          var lastData = jsPsych.data.get().last(16);
           var words = lastData.select('responses').values.toString();
           var wordCount = words.split(" ").length;
 
