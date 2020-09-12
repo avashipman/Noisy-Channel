@@ -100,7 +100,7 @@ jsPsych.plugins['survey-text-edit'] = (function() {
       html += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
     }
     // start form
-    html += '<form id="jspsych-survey-text-form">'
+    html += '<form id="jspsych-survey-text-form" autocomplete="off">'
 
     // generate question order
     var question_order = [];
@@ -120,7 +120,7 @@ jsPsych.plugins['survey-text-edit'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        html += '<input type="text" id="input-'+question_index+'"  name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
+        html += '<input type="text" id="input-'+question_index+'"  name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'" autocomplete="off" ></input>';
       } else {
         html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
@@ -133,14 +133,8 @@ jsPsych.plugins['survey-text-edit'] = (function() {
     html += '</form>'
     display_element.innerHTML = html;
 
-    //No numbers in textbox function 
-    function lettersOnly(input) {
-      var regex = /[0-9]/g;
-      var input = event.target;
-      input.value = input.value.replace(regex, "");
-  }
-    
-    document.querySelector('#input-'+question_index).addEventListener('input', lettersOnly)
+    // Turn the autocompletion off
+    document.getElementById('jspsych-survey-text-form').setAttribute('autocomplete', 'off');
 
 
     // backup in case autofocus doesn't work
