@@ -1,13 +1,3 @@
-/**
- * jspsych-survey-text
- * a jspsych plugin for free response survey questions
- *
- * Josh de Leeuw
- *
- * documentation: docs.jspsych.org
- *
- */
-
 
 jsPsych.plugins['survey-text-edit'] = (function() {
 
@@ -120,7 +110,7 @@ jsPsych.plugins['survey-text-edit'] = (function() {
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if(question.rows == 1){
-        html += '<input type="text" id="input-'+question_index+'"  name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'" autocomplete="off" ></input>';
+        html += '<input type="text" autocomplete="off" id="input-'+question_index+'"  name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" size="'+question.columns+'" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></input>';
       } else {
         html += '<textarea id="input-'+question_index+'" name="#jspsych-survey-text-response-' + question_index + '" data-name="'+question.name+'" cols="' + question.columns + '" rows="' + question.rows + '" '+autofocus+' '+req+' placeholder="'+question.placeholder+'"></textarea>';
       }
@@ -133,7 +123,6 @@ jsPsych.plugins['survey-text-edit'] = (function() {
     html += '</form>'
     display_element.innerHTML = html;
 
-    // Turn the autocompletion off
     document.getElementById('jspsych-survey-text-form').setAttribute('autocomplete', 'off');
 
 
