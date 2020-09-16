@@ -1,347 +1,382 @@
-<!DOCTYPE html>
-<html>
+jsPsych.plugins["survey-distractor"] = (function () {
+  var plugin = {};
 
-<head>
-  <title>Alternate</title>
-  <script src="jspsych-6.1.0/jspsych.js"></script>
-  <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
-  <script src="jspsych-6.1.0/plugins/jspsych-survey-text-edit.js"></script>
-  <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
-  <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
-  <script src="jspsych-6.1.0/jspsych-survey-distractor.js"></script>
-  <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css">
-  <link href="jspsych-6.1.0/css/fadeOut.css" rel="stylesheet" type="text/css">
-  <style>
-    .center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
-    }
-  </style>
-</head>
-
-<body>
-  <script>
-
-var timeline = [];
-    /* define welcome message trial */
-    var welcome = {
-      type: "html-keyboard-response",
-      stimulus: "Welcome to the experiment. Press any key to begin."
-    };
-    timeline.push(welcome);
-
-    /* define instructions trial */
-    var instructions1 = {
-      type: "html-button-response",
-      stimulus: "<div style='text-align:left;'><p>In this task, we will ask you a variety of questions about your impressions, activities, beliefs, preferences, etc. " +
-        "We would like you to answer each of these questions with one full sentence, which can be as long as you want. </p>" +
-        "<p>For any question, if you can't think of an answer from your experiences (or prefer not to), please respond with what you imagine a friend or acquaintance might respond. " +
-        "<strong> Just type what comes to mind. </strong> </p>" +
-        "<p>Do not worry about making errors while typing; the backspace will be disabled. Numbers will also be disabled, so if you need to use numbers please write them out. " +
-        "We will give you a chance afterwards to correct any errors you find in your response. The number keys and the baskpace will be available then. </p></d>" +
-        "<br></br>",
-      choices: ["NEXT"],
-      post_trial_gap: 500
-    };
-    timeline.push(instructions1);
-
-    var instructions2 = {
-      type: "html-button-response",
-      stimulus: "<p>While you are completing your sentence, there will be geometric shapes appearing at the bottom of the screen. " +
-        "<p>If you see a <strong> Red X </strong>, press 8. Otherwise, please refrain from responding to any other shapes.</p>" +
-        "<p>Reminder: the number keys and the backspace will be disabled. </p>" +
-        "<br></br>" +
-        "<div class='center'><img src='target.png'></img>" +
-        "<p class='small'><strong>Press 8</strong></p></div>" +
-        "</div>" + "<br></br>",
-      choices: ["CONTINUE TO A PRACTICE TRIAL"],
-      post_trial_gap: 500
-    };
-    timeline.push(instructions2);
-
-    //load stimuli (images and timeline variables)
-    var images = [
-      'addition.png',
-      'blacksquareJ.png',
-      'diamond.png',
-      'hexagon.png',
-      'orangeimgJ.png',
-      'pentagonJ.png',
-      'rectangle.png',
-      'star.png',
-      'triangleJ.png',
-      'target.png'
-    ];
-
-    var testVariables = [
-      { prompt: 'What did you do last weekend?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What is your favorite season and why', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What do you think you’ll do on your next birthday?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'How would you explain something complicated to a child?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What was your first job and what did you do on a day-to-day basis?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Where would you least like to live and why?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'How do you fix a flat tire?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What is the weather like today?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe the restaurant you are least likely to recommend to a friend.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What helps lift your mood when you are having a bad day?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Do you prefer reading fiction or non-fiction?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe the last HIT you did before this one.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What is the most annoying Mechanical Turk task you have done?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What did you have for dinner yesterday?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe the last meal you have cooked yourself.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'How often do you exercise and what do you do?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'If you had nothing else to do, what would you do right now?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'In your opinion, what is the biggest problem the US faces these days?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'At what age do you think you became an adult and why?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Which one is a worse crime and why: tax fraud or armed robbery?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe the last conversation you had with a stranger.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Where are your parents from and where did you grow up?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What was the longest drive you have been on?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Does your state have the death penalty and do you think it should?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'If you could make one change to the US constitution, what would you change?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe a topic that comes up frequently in conversation with your friends or family.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'When you use your computer, what are you usually doing?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'If someone is rude to you, do you care whether it was intentional or not?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'In what context did you last write a handwritten letter to somebody?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Do you know who Paul Ryan is and what has he done recently?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What is Michael Phelps famous for?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'How much time do you spend on average using a phone and what do you use it for?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe the objects that are in your immediate surroundings right now.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'What would you do on a sunny summer day?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Describe one thing you were afraid of as a child.', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Who would you turn to for advice if you had a serious disagreement with your boss?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Would you consider moving more than 200 miles away for your dream job? Why or why not?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'How many veterans do you personally know and how close are they to you?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'Which continent do you think has the highest standard of living and why?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'If you decided to break up with someone but do not want to hurt their feelings, what would you tell them?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: 'If you do not enjoy the dinner somebody else cooked for you, what would you tell them?', distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Name 3 advantages or disadvantages of living in a city.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Does science play an important role in society? Why or why not?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What was your favorite subject in school and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Where did you go on your last vacation and how was it?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Where would you like to go on your next vaction and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What is your earliest childhood memory?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What do you think you'll be doing ten years from today?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If you could pick a dream job, what would it be and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe the plot of a book or movie that you recently enjoyed.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What is the biggest challenge that you've ever overcome?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What would you do if you had a million dollars to spend and only one week to spend it before it dissappears?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What do you think is the most important attribute in a good teacher?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What is the skill that you are most proud of and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What personality trait do you think your friends like most about you?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What personality trait do you value most in others and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What personality trait do you hate most in others and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If scientists develop a way to live on Mars, would you move there and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If you could live anywhere in the world, where would it be and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If you could travel to any time period in history, when would you time-travel to?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What famous figure do you admire most and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe the home where you grew up.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Would you rather be able to teleport to any location in the world or become invisible, and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think it's better to make lots of money doing a job you hate or make very little money doing a job you love?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think people have soulmates and what does it mean to have a soulmate?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think most people in the world are happy and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think current world leaders are learning from history or repeating the mistakes of the past?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think parents should always praise their children? Why or why not?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What is the best way for students to learn complicated material?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "At what age do people have the most fun and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe some traditions or customs that you grew up with.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What superpower would you pick for yourself and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe how you boil an egg.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe how you make a peanut butter and jelly sandwich.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What do you do when you are having trouble falling asleep?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Who would play you in a movie about your life and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What is the most important thing a parent can teach a child and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What will be the biggest invention to happen in the next 5 years?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What do you think is the biggest difference between your generation and your parents' generation?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What do you think will be the biggest difference between your generation and the next generation?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think technology has improved your life and, if so, in what way?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What makes a city or town a good place to live?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Are you an optimist or a pessimist and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If you find out your friend's partner is cheating on them, would you tell them and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Would you steal from a very rich criminal to help your family and why? ", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think marriage is an institution that will slowly dissappear? why or why not?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think it's better to be an only child or to have siblings?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Describe the details of what you do when you get into a car and start driving.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "If you could only eat one food for the rest of your life, what would you pick and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think it's important to be well-dressed at work? Why or why not?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "What 3 survival tools would you bring with you on a desert island and why?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Do you think that pets understand how their owners are feeling? What makes you think that?", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) },
-      { prompt: "Imagine that your friend is very scared of flying. Descibe what you would say to them to calm them down.", distractor: jsPsych.randomization.sampleWithReplacement(images, 50, [1.5, 14, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 24]) }
-    ];
-
-    var trial_counter = 0
-
-    //practice trial
-    var practice = {
-      timeline: [
-        {
-          type: "survey-distractor",
-          questions: [{ prompt: "<p>This is what the task will look like. Press 8 when the red X appears.</p>" +
-          "<p> What's an acceptable reason to miss a date?</p>" , required: true }],
-          button_label: "SUBMIT",
-          preamble: "Please write one sentence.",
-          stimulus: [
-            'blacksquareJ.png',
-            'diamond.png',
-            'hexagon.png',
-            'target.png',
-            'orangeimgJ.png',
-            'pentagonJ.png',
-            'rectangle.png',
-            'star.png',
-            'triangleJ.png'
-          ],
-          choices: ['Digit8'],
-          response_next_image: 1800,
-          post_trial_gap: 500,
+  plugin.info = {
+    name: "survey-distractor",
+    description: "",
+    parameters: {
+      questions: {
+        type: jsPsych.plugins.parameterType.COMPLEX,
+        array: true,
+        pretty_name: "Questions",
+        default: undefined,
+        nested: {
+          prompt: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: "Prompt",
+            default: undefined,
+            description: "Prompt for the subject to response",
+          },
+          placeholder: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: "Value",
+            default: "",
+            description: "Placeholder text in the textfield.",
+          },
+          rows: {
+            type: jsPsych.plugins.parameterType.INT,
+            pretty_name: "Rows",
+            default: 1,
+            description: "The number of rows for the response text box.",
+          },
+          columns: {
+            type: jsPsych.plugins.parameterType.INT,
+            pretty_name: "Columns",
+            default: 40,
+            description: "The number of columns for the response text box.",
+          },
+          required: {
+            type: jsPsych.plugins.parameterType.BOOL,
+            pretty_name: "Required",
+            default: false,
+            description: "Require a response",
+          },
+          name: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: "Question Name",
+            default: "",
+            description:
+              "Controls the name of data values associated with this question",
+          },
         },
+      },
+      preamble: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Preamble",
+        default: null,
+        description:
+          "HTML formatted string to display at the top of the page above all the questions.",
+      },
+      button_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Button label",
+        default: "SUBMIT",
+        description: "The text that appears on the button to finish the trial.",
+      },
+      stimulus: {
+        type: jsPsych.plugins.parameterType.COMPLEX,
+        array: true,
+        pretty_name: "Stimulus",
+        default: undefined,
+        description: "The image to be displayed",
+      },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Image height",
+        default: null,
+        description: "Set the image height in pixels",
+      },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Image width",
+        default: null,
+        description: "Set the image width in pixels",
+      },
+      maintain_aspect_ratio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Maintain aspect ratio",
+        default: true,
+        description: "Maintain the aspect ratio after setting width or height",
+      },
+      choices: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        array: true,
+        pretty_name: "Choices",
+        default: jsPsych.ALL_KEYS,
+        description:
+          "The keys the subject is allowed to press to respond to the stimulus.",
+      },
+      response_next_image: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Response goes to next image",
+        default: null,
+        description:
+          "If true, the next image will appear when subject makes a response.",
+      },
+    },
+  };
 
-        {
-          type: "survey-text-edit",
-          questions: function () {
-            const prev_answer = JSON.parse(
-              jsPsych.data.getLastTrialData().values()[0].responses
-            ).Q0;
-            var new_prompt = "<p>Please edit your sentence or copy it.</p>";
-            new_prompt += "<p><strong>" + prev_answer + "</strong></p>";
+  plugin.trial = function (display_element, trial) {
+    display_element.innerHTML =
+      '<div id="main_task"></div><br></br><br></br><div id="distractor-stimulus-container"></div>';
+    display_element_main_task = document.querySelector("#main_task");
+    display_element_distractor = document.querySelector("#distractor-stimulus-container");
 
-            return [{ prompt: new_prompt, required: true }];
-          },
-          post_trial_gap: 1000,
-        }
-      ],
-    };
-    timeline.push(practice);
-
-    //start the experiment
-    var start = {
-      type: "html-button-response",
-      stimulus: "<p>Good practice!</p> <p>Press the button when you are ready to start the experiment.</p> <br></br>",
-      choices: ["BEGIN"],
-      post_trial_gap: 1000
-    };
-    timeline.push(start);
-
-    //experiment
-    var experiment = {
-      timeline: [
-        {
-          type: "survey-distractor",
-          questions: function () {
-            return [{ prompt: jsPsych.timelineVariable("prompt", true), required: true}];
-          },
-          stimulus: jsPsych.timelineVariable("distractor"),
-          choices: ['Digit8'],
-          preamble: "Please write one sentence.",
-          response_next_image: 1800,
-          post_trial_gap: 500,
-        },
-
-        {
-          type: "survey-text-edit",
-          questions: function () {
-            const prev_answer = JSON.parse(
-              jsPsych.data.getLastTrialData().values()[0].responses
-            ).Q0;
-            var new_prompt = "<p>Please edit your sentence or copy it.</p>";
-            new_prompt += "<p><strong>" + prev_answer + "</strong></p>";
-
-            return [{ prompt: new_prompt, required: true}];
-          },
-          post_trial_gap: 1000,
-        }
-      ],
-    };
-
-
-    //rest timeline
-    var rest = {
-      type: "html-button-response",
-      stimulus: function () {
-        var lastData = jsPsych.data.get().last(16);
-        var words = lastData.select('responses').values.toString();
-        var wordCount = words.split(" ").length;
-
-        var targetAmount = lastData.select('targetAmount').sum();
-        var correctAmount = lastData.select('keyPressed').values.toString();
-        var correct_amount = (correctAmount.match(/target.png/g) || []).length;
-        console.log(correctAmount);
-
-        return "<p> In this last section you typed " + wordCount + " words and detected " + correct_amount + " out of " + targetAmount + " X's.</p>" +
-          "<p> Keep it up! </p>" +
-          "<p> Push the button whenever you are ready to continue</p>"
+    //survey
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].rows == "undefined") {
+        trial.questions[i].rows = 1;
       }
-
-      ,
-      choices: ["CONTINUE"]
     }
-    //conditional timeline to run rest
-    var if_node = {
-      timeline: [rest],
-      conditional_function: function () {
-        trial_counter++;
-        if (trial_counter % 8 === 0) {
-          return true;
-        } else {
-          return false;
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].columns == "undefined") {
+        trial.questions[i].columns = 40;
+      }
+    }
+    for (var i = 0; i < trial.questions.length; i++) {
+      if (typeof trial.questions[i].value == "undefined") {
+        trial.questions[i].value = "";
+      }
+    }
+
+    var htmlSurvey = "";
+    // show preamble text
+    if (trial.preamble !== null) {
+      htmlSurvey +=
+        '<div id="main_task-preamble" class="main_task-preamble">' +
+        trial.preamble +
+        "</div>";
+    }
+    // start form
+    htmlSurvey += '<form id="main_task-form" autocomplete="off">';
+
+    // generate question order
+    var question_order = [];
+    for (var i = 0; i < trial.questions.length; i++) {
+      question_order.push(i);
+    }
+    if (trial.randomize_question_order) {
+      question_order = jsPsych.randomization.shuffle(question_order);
+    }
+
+    // add questions
+    for (var i = 0; i < trial.questions.length; i++) {
+      var question = trial.questions[question_order[i]];
+      var question_index = question_order[i];
+      htmlSurvey +=
+        '<div id="main_task-' +
+        question_index +
+        '" class="main_task-question" style="margin: 2em 0em;">';
+      htmlSurvey +=
+        '<p class="jspsych-survey-distractor">' + question.prompt + "</p>";
+      var req = question.required ? "required" : "";
+      if (question.rows == 1) {
+        htmlSurvey +=
+          '<input type="text" id="survey-input" autocomplete="off" name="#main_task-response-' +
+          question_index +
+          '" data-name="' +
+          question.name +
+          '" size="' +
+          question.columns +
+          '" ' +
+          req +
+          ' placeholder="' +
+          question.placeholder +
+          '"></input>';
+      } else {
+        htmlSurvey +=
+          '<textarea id="survey-input" name="#main_task-response-' +
+          question_index +
+          '" data-name="' +
+          question.name +
+          '" cols="' +
+          question.columns +
+          '" rows="' +
+          question.rows +
+          '" ' +
+          autofocus +
+          " " +
+          req +
+          ' placeholder="' +
+          question.placeholder +
+          '"></textarea>';
+      }
+      htmlSurvey += "</div>";
+    }
+
+    // add submit button
+    htmlSurvey +=
+      '<input type="submit" id="main_task-next" class="jspsych-btn main_task" value="' +
+      trial.button_label +
+      '"></input>';
+
+    htmlSurvey += "</form>";
+    display_element_main_task.innerHTML = htmlSurvey;
+
+    //No numbers in textbox function 
+    function lettersOnly(input) {
+      var regex = /[0-9]/g;
+      var input = event.target;
+      input.value = input.value.replace(regex, "");
+    }
+
+    function preventBackspace(e) {
+      var evt = e || window.event;
+      if (evt) {
+        var keyCode = evt.charCode || evt.keyCode;
+        if (keyCode == 8) {
+          if (evt.preventDefault) {
+            evt.preventDefault();
+          } else {
+            evt.returnValue = false;
+          }
         }
       }
-    };
+    }
 
-    //trial procedure where all timelines are combined
-    var trial_procedure = {
-      timeline: [experiment, if_node],
-      timeline_variables: testVariables,
-      sample: {
-        type: 'without-replacement',
-        size: 24,
-      },
-      randomize_order: true,
-    };
-    timeline.push(trial_procedure);
 
-    //after experiment the user gets an overall debrief
-    var debrief_block = {
-      type: "html-keyboard-response",
-      stimulus: function () {
-        var totalData = jsPsych.data.get();
+    document.querySelector("#survey-input").addEventListener('keydown', preventBackspace)
+    document.querySelector("#survey-input").addEventListener('input', lettersOnly)
+    document.getElementById('main_task-form').setAttribute('autocomplete', 'off');
+    document.getElementById("survey-input").focus();
 
-        var targetAmount = totalData.select('targetAmount').sum();
-        var correctAmount = totalData.select('keyPressed').values.toString();
-        var correct_amount = (correctAmount.match(/target.png/g) || []).length;
+    //generate image order
+    var image_order = [];
+    for (var i = 0; i < trial.stimulus.length; i++) {
+      image_order.push(i);
+    }
+    if (trial.randomize_image_order) {
+      image_order = jsPsych.randomization.shuffle(image_order);
+    }
 
-        var words = totalData.select('responses').values.toString();
-        var wordsTotal = words.split(" ").length;
+    //display distractor stimulus
+    var htmlDistractor = "";
 
-        return "<p>You detected " + correct_amount + " out of " + targetAmount + " X's in total!</p>" +
-          "<p>You typed " + wordsTotal + " words in total!</p>" +
-          "<p>Press any key to finish the experiment and to retrieve your code. Thank you!</p>";
+    htmlDistractor += '<img id="distractor-stimulus" src="blacksquareJ.png" style="';
+    if (trial.stimulus_height !== null) {
+      htmlDistractor += "height:" + trial.stimulus_height + "px; ";
+      if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
+        htmlDistractor += "width: auto; ";
       }
+    }
+    if (trial.stimulus_width !== null) {
+      htmlDistractor += "width:" + trial.stimulus_width + "px; ";
+      if (trial.stimulus_height == null && trial.maintain_aspect_ratio) {
+        htmlDistractor += "height: auto; ";
+      }
+    }
+    htmlDistractor += '"></img>';
+
+    display_element_distractor.innerHTML = htmlDistractor;
+
+    var imgArray = trial.stimulus;
+    var curIndex = 0;
+    var targetData = [];
+    var shapeData = [];
+    var distractor_data = [];
+    var target_response = [];
+
+    let currentKeypressListener = null;
+
+    //function for oddball task
+    function slideShow() {
+      console.log(imgArray[curIndex]);
+
+      //slideshow
+      curIndex++;
+      curIndex = curIndex % imgArray.length;
+      document.getElementById("distractor-stimulus").className = "fadeOut";
+      setTimeout(function () {
+        document.getElementById("distractor-stimulus").className = "";
+        document.getElementById("distractor-stimulus").src = imgArray[curIndex];
+        //push shapeData
+        shapeData.push(imgArray[curIndex])
+        target_response.push({ shape: imgArray[curIndex], response: "0" })
+        //function to count the amount of time X appears
+        function targetArray() {
+          var x = imgArray[curIndex];
+          if (x == "target.png") {
+            targetData.push(x)
+          }
+        };
+        targetArray();
+      }, 800);
+
+      //keyboard listener
+      if (currentKeypressListener) {
+        document.removeEventListener('keypress', currentKeypressListener)
+        currentKeypressListener = null
+      }
+
+      //when trial.choices is pressed
+      const listener = function (e) {
+        if (trial.choices.includes(e.code)) {
+          console.log(e.code, trial.choices, distractor_data);
+          distractor_data.push(imgArray[curIndex])
+          document.getElementById("distractor-stimulus").className = "green";
+          target_response.push({ shape: imgArray[curIndex], response: "1" })
+          document.removeEventListener('keypress', listener)
+          currentKeypressListener = null
+        }
+      }
+      currentKeypressListener = listener
+      document.addEventListener('keypress', listener)
     };
-    timeline.push(debrief_block);
 
-    //user gets code to tell MTurk that they completed the task
-    var code = {
-      type: "html-button-response",
-      stimulus: "<p> <strong> Copy code: </strong>" + jsPsych.randomization.randomID(8) + "</p>" +
-      "<p> Paste your code in MechanicalTurk",
-      choices: ["FINISH"]
-    };
-    timeline.push(code);
+    const intervalId = setInterval(slideShow, trial.response_next_image);
 
-    jsPsych.init({
-      timeline: timeline,
-      on_finish: function () { 
-        var x = document.createElement("H4");
-        var t = document.createTextNode("Please go back to the MechanicalTurk page. " +
-        "Thank you!");
-        x.appendChild(t);
-        document.body.appendChild(x);
-      },
-    })
-  </script>
-</body>
+    // function when you hit submit
+    display_element_main_task
+      .querySelector("#main_task-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        // measure response time
+        var endTime = performance.now();
+        var response_time = endTime - startTime;
 
-</html>
+        document.removeEventListener('keypress', currentKeypressListener)
+
+        // create object to hold responses
+        var question_data = {};
+
+        for (var index = 0; index < trial.questions.length; index++) {
+          var id = "Q" + index;
+          var q_element = document
+            .querySelector("#main_task-" + index)
+            .querySelector("textarea, input");
+          var val = q_element.value;
+          var name = q_element.attributes["data-name"].value;
+          if (name == "") {
+            name = id;
+          }
+          var obje = {};
+          obje[name] = val;
+          Object.assign(question_data, obje);
+        }
+
+        // save data
+        var trial_data = {
+          "rt": response_time,
+          "stimulus": JSON.stringify(question.prompt),
+          "responses": JSON.stringify(question_data),
+          "keyPressed": distractor_data,
+          "targetAmount": targetData.length,
+          "targetResponse": JSON.stringify(target_response),
+          "shapes": shapeData,
+        };
+
+        //clean up target_response data 
+        var i = 0;
+        while (i < target_response.length) {
+          if (target_response[i].response === "1") {
+            target_response.splice(i - 1, 1);
+          } else {
+            ++i;
+          }
+        }
+
+        display_element.innerHTML = "";
+
+        // next trial
+        clearInterval(intervalId)
+        jsPsych.pluginAPI.cancelAllKeyboardResponses();
+        jsPsych.finishTrial(trial_data);
+      });
+
+    console.log(target_response)
+
+    var startTime = performance.now();
+  };
+
+  return plugin;
+})();
