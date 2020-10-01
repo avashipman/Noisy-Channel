@@ -242,7 +242,7 @@ jsPsych.plugins["survey-distractor"] = (function () {
     //display distractor stimulus
     var htmlDistractor = "";
 
-    htmlDistractor += '<img id="distractor-stimulus" src="blacksquareJ.png" style="';
+    htmlDistractor += '<img id="distractor-stimulus" src="square.png" style="';
     if (trial.stimulus_height !== null) {
       htmlDistractor += "height:" + trial.stimulus_height + "px; ";
       if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
@@ -344,6 +344,16 @@ jsPsych.plugins["survey-distractor"] = (function () {
           Object.assign(question_data, obje);
         }
 
+         //clean up target_response data 
+         var i = 0;
+         while (i < target_response.length) {
+           if (target_response[i].response === "1") {
+             target_response.splice(i - 1, 1);
+           } else {
+             ++i;
+           }
+         }
+
         // save data
         var trial_data = {
           "rt": response_time,
@@ -354,16 +364,6 @@ jsPsych.plugins["survey-distractor"] = (function () {
           "targetResponse": JSON.stringify(target_response),
           "shapes": shapeData,
         };
-
-        //clean up target_response data 
-        var i = 0;
-        while (i < target_response.length) {
-          if (target_response[i].response === "1") {
-            target_response.splice(i - 1, 1);
-          } else {
-            ++i;
-          }
-        }
 
         display_element.innerHTML = "";
 
