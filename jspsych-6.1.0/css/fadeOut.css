@@ -1,19 +1,18 @@
-/*
- * CSS for jsPsych experiments.
- *
- * This stylesheet provides minimal styling to make jsPsych
- * experiments look polished without any additional styles.
- */
-
- @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 /* Fade-in and Fade-out slideshow */
 #distractor-stimulus {
+    border:10px solid white;
     opacity:1;
     visibility: visible;
 }
 
 #distractor-stimulus.fadeOut {
+    border:10px solid white;
     opacity:0;
     visibility: hidden;
+}
+
+#distractor-stimulus.green {
+    border:10px solid gray;
 }
