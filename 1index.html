@@ -24,7 +24,23 @@
 <body>
   <script>
 
-var timeline = [];
+    var timeline = [];
+
+    // consent form
+    var consent = {
+      type: "html-button-response",
+      stimulus: '<iframe src="consent_form.pdf" style="width:1000px; height:800px;" frameborder="0" allowfullscreen></iframe> ' +
+        '<br></br>',
+      choices: ["I HAVE READ THE PRECEDING INFORMATION AND WOULD LIKE TO PARTICIPATE IN THE STUDY",
+        "I WOULD LIKE TO WITHDRAW FROM THIS STUDY. (There is no penalty for withdrawing.)"],
+      on_finish: function (data) {
+        if (data.button_pressed == 1) {
+          jsPsych.endExperiment('<p>Thank you for your response. </p> <p> Please return this HIT through the Amazon Mechanical Turk platform. (you can close this browser window) </p>');
+        }
+      }
+    };
+    timeline.push(consent);
+
     /* define welcome message trial */
     var welcome = {
       type: "html-keyboard-response",
@@ -64,14 +80,14 @@ var timeline = [];
     //load stimuli (images and timeline variables)
     var images = [
       'addition.png',
-      'blacksquareJ.png',
+      'square.png',
       'diamond.png',
       'hexagon.png',
-      'orangeimgJ.png',
-      'pentagonJ.png',
+      'circle.png',
+      'pentagon.png',
       'rectangle.png',
       'star.png',
-      'triangleJ.png',
+      'triangle.png',
       'target.png'
     ];
 
@@ -178,20 +194,22 @@ var timeline = [];
       timeline: [
         {
           type: "survey-distractor",
-          questions: [{ prompt: "<p>This is what the task will look like. Press 8 when the red X appears.</p>" +
-          "<p> What's an acceptable reason to miss a date?</p>" , required: true }],
+          questions: [{ prompt: "What's an acceptable reason to miss a date?", required: true }],
           button_label: "SUBMIT",
-          preamble: "Please write one sentence.",
+          preamble: "<strong>This is what the task will look like. Press 8 when the red X appears.</strong>" + "<p></p>" +
+            "Please write one sentence. ",
           stimulus: [
-            'blacksquareJ.png',
+            'square.png',
             'diamond.png',
             'hexagon.png',
             'target.png',
-            'orangeimgJ.png',
-            'pentagonJ.png',
+            'circle.png',
+            'pentagon.png',
+            'target.png',
             'rectangle.png',
             'star.png',
-            'triangleJ.png'
+            'triangle.png',
+            'target.png'
           ],
           choices: ['Digit8'],
           response_next_image: 1800,
@@ -230,7 +248,7 @@ var timeline = [];
         {
           type: "survey-distractor",
           questions: function () {
-            return [{ prompt: jsPsych.timelineVariable("prompt", true), required: true}];
+            return [{ prompt: jsPsych.timelineVariable("prompt", true), required: true }];
           },
           stimulus: jsPsych.timelineVariable("distractor"),
           choices: ['Digit8'],
@@ -248,7 +266,7 @@ var timeline = [];
             var new_prompt = "<p>Please edit your sentence or copy it.</p>";
             new_prompt += "<p><strong>" + prev_answer + "</strong></p>";
 
-            return [{ prompt: new_prompt, required: true}];
+            return [{ prompt: new_prompt, required: true }];
           },
           post_trial_gap: 1000,
         }
@@ -317,7 +335,7 @@ var timeline = [];
 
         return "<p>You detected " + correct_amount + " out of " + targetAmount + " X's in total!</p>" +
           "<p>You typed " + wordsTotal + " words in total!</p>" +
-          "<p>Press any key to finish the experiment and to retrieve your code. Thank you!</p>";
+          "<p>Press any key to retrieve your code. Thank you!</p>";
       }
     };
     timeline.push(debrief_block);
@@ -326,20 +344,16 @@ var timeline = [];
     var code = {
       type: "html-button-response",
       stimulus: "<p> <strong> Copy code: </strong>" + jsPsych.randomization.randomID(8) + "</p>" +
-      "<p> Paste your code in MechanicalTurk",
-      choices: ["FINISH"]
+        "<p> Paste your code in MechanicalTurk",
+      choices: ["FINISH"],
+      on_finish: function () {
+        jsPsych.endExperiment('<p>You have completed the experiment!</p> <p> Please return to MTurk and enter your code. </p> <p>Thank you for your time!</p>');
+      }
     };
     timeline.push(code);
 
     jsPsych.init({
       timeline: timeline,
-      on_finish: function () { 
-        var x = document.createElement("H4");
-        var t = document.createTextNode("Please go back to the MechanicalTurk page. " +
-        "Thank you!");
-        x.appendChild(t);
-        document.body.appendChild(x);
-      },
     })
   </script>
 </body>
