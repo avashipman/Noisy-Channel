@@ -153,6 +153,7 @@ jsPsych.plugins['survey-text-edit'] = (function() {
       // save data
       var trialdata = {
         "rt": response_time,
+        "stimulus": JSON.stringify(question.prompt), 
         "responses": JSON.stringify(question_data)
       };
 
