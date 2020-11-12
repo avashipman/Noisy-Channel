@@ -222,8 +222,8 @@
             const prev_answer = JSON.parse(
               jsPsych.data.getLastTrialData().values()[0].responses
             ).Q0;
-            var new_prompt = "<p>Please edit your sentence or copy it.</p>";
-            new_prompt += "<p><strong>" + prev_answer + "</strong></p>";
+            var new_prompt = "Please rewrite the exact same sentence. <p>It's fine to copy what you previously wrote and correct any errors if there are any.</p>";
+            new_prompt += "<br><strong>" + prev_answer + "</strong></br>";
 
             return [{ prompt: new_prompt, required: true }];
           },
@@ -236,9 +236,9 @@
     //start the experiment
     var start = {
       type: "html-button-response",
-      stimulus: "<p>Good practice!</p> <p>Press the button when you are ready to start the experiment.</p> <br></br>",
+      stimulus: "Good practice! <p>Press the BEGIN button when you are ready to start the experiment.</p> ",
       choices: ["BEGIN"],
-      post_trial_gap: 1000
+      post_trial_gap: 1000,
     };
     timeline.push(start);
 
@@ -263,8 +263,8 @@
             const prev_answer = JSON.parse(
               jsPsych.data.getLastTrialData().values()[0].responses
             ).Q0;
-            var new_prompt = "<p>Please edit your sentence or copy it.</p>";
-            new_prompt += "<p><strong>" + prev_answer + "</strong></p>";
+            var new_prompt = "Please rewrite the exact same sentence. <p>It's fine to copy what you previously wrote and correct any errors if there are any.</p>";
+            new_prompt += "<br><strong>" + prev_answer + "</strong></br>";
 
             return [{ prompt: new_prompt, required: true }];
           },
@@ -287,11 +287,16 @@
         var correct_amount = (correctAmount.match(/target.png/g) || []).length;
         console.log(correctAmount);
 
-        return "<p> In this last section you typed " + wordCount + " words and detected " + correct_amount + " out of " + targetAmount + " X's.</p>" +
-          "<p> Keep it up! </p>" +
+        if ((correct_amount/targetAmount) >= 1/4) {
+        return "In this last section you typed " + wordCount + " words and detected " + correct_amount + " out of " + targetAmount + " X's." +
+          "<p> Well done! Keep it up! </p>" +
+          "<p> Push the button whenever you are ready to continue</p>"
+      } else {
+        return "In this last section you typed " + wordCount + " words and detected " + correct_amount + " out of " + targetAmount + " X's." +
+          "<p> See if you can detect more X's! </p>" +
           "<p> Push the button whenever you are ready to continue</p>"
       }
-
+      } 
       ,
       choices: ["CONTINUE"]
     }
@@ -333,7 +338,7 @@
         var words = totalData.select('responses').values.toString();
         var wordsTotal = words.split(" ").length;
 
-        return "<p>You detected " + correct_amount + " out of " + targetAmount + " X's in total!</p>" +
+        return "You detected " + correct_amount + " out of " + targetAmount + " X's in total!" +
           "<p>You typed " + wordsTotal + " words in total!</p>" +
           "<p>Press any key to retrieve your code. Thank you!</p>";
       }
@@ -341,20 +346,22 @@
     timeline.push(debrief_block);
 
     //user gets code to tell MTurk that they completed the task
+    var subject_ID = jsPsych.randomization.randomID(8)
     var code = {
       type: "html-button-response",
-      stimulus: "<p> <strong> Copy code: </strong>" + jsPsych.randomization.randomID(8) + "</p>" +
+      stimulus: "<strong> Copy code: </strong>" + subject_ID + "" +
         "<p> Paste your code in MechanicalTurk",
       choices: ["FINISH"],
       on_finish: function () {
-        jsPsych.endExperiment('<p>You have completed the experiment!</p> <p> Please return to MTurk and enter your code. </p> <p>Thank you for your time!</p>');
+        jsPsych.endExperiment('You have completed the experiment! <p> Please return to MTurk and enter your code. </p> <p>Thank you for your time!</p>'),
+        jsPsych.data.addProperties({subjectID: subject_ID});
       }
     };
     timeline.push(code);
 
     jsPsych.init({
       timeline: timeline,
-    })
+    });
   </script>
 </body>
 
